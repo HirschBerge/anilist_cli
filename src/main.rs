@@ -2,7 +2,7 @@
 // serde_json = "1.0"
 // reqwest = "0.11.8"
 // tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
-// main.rs
+// https://anilist.github.io/ApiV2-GraphQL-Docs/
 
 mod requests;
 // Query to use in request
