@@ -12,4 +12,4 @@ This project plans to be a simple CLI front-end for [Anilist](https://anilist.gi
 - [ ] CLI search flag
 - [ ] Search subdirectories given a directory
 - [ ] UI? see also [#1](/../../issues/1)
-- [ ] Some invalid IDs returned by API. Work around. See also #2
+- [ ] Some invalid IDs returned by API. Work around. See also [#2](/../../issues/2)
