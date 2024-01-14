@@ -1,14 +1,33 @@
-// This example uses the following crates:
-// serde_json = "1.0"
-// reqwest = "0.11.8"
-// tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
-// https://anilist.github.io/ApiV2-GraphQL-Docs/
-
 mod requests;
 // Query to use in request
 extern crate skim;
 use skim::prelude::*;
-use std::io::Cursor;
+use std::{fs, io::Cursor};
+
+fn generate_dirs(dir_path: &str) -> Vec<String> {
+    match fs::read_dir(dir_path) {
+        Ok(entries) => {
+            let directories: Vec<_> = entries
+                .filter_map(|entry| match entry {
+                    Ok(entry) => {
+                        if entry.path().is_dir() {
+                            Some(entry.file_name().to_string_lossy().into_owned())
+                        } else {
+                            None
+                        }
+                    }
+                    Err(_) => None,
+                })
+                .collect();
+
+            directories
+        }
+        Err(err) => {
+            eprintln!("Error reading directory {}: {:?}", dir_path, err);
+            Vec::new()
+        }
+    }
+}
 
 fn fzf(options: Vec<String>) -> Option<String> {
     let stringified_choice = options.join("\n");
@@ -40,11 +59,7 @@ fn fzf(options: Vec<String>) -> Option<String> {
 #[tokio::main]
 
 async fn main() {
-    let animes = vec![
-        "Re:Zero".to_string(), //"Re:Zero: Kara Hajimeru Isekai Seikatsu".to_string(),
-        "Mushoku Tensei".to_string(), // "Mushoku Tensei: Jobless Reincarnation".to_string(),
-        "Tensura".to_string(), // "Tensei Shitara Slime Datta Ken".to_string(),
-    ];
+    let animes = generate_dirs("/mnt/NAS/Anime");
     let title = fzf(animes);
     let mut chosen_id = 0;
     if let Some(title) = title {
@@ -70,6 +85,6 @@ async fn main() {
     } else {
         println!("No title selected");
     }
-    println!("ID is: {}", chosen_id);
+    // println!("ID is: {}", chosen_id);
     requests::print_info(chosen_id).await;
 }

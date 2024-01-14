@@ -1,6 +1,6 @@
 use reqwest::Client;
 use serde_json::json;
-use std::{collections::HashMap, process};
+use std::collections::HashMap;
 
 const QUERY_PAGES: &str = "
 query ($id: Int, $page: Int, $perPage: Int, $search: String) {
@@ -34,6 +34,11 @@ query ($id: Int) { # Define which variables will be used in the query (id)
     status
     description
     averageScore
+    seasonYear
+    episodes
+    nextAiringEpisode {
+        airingAt
+    }
   }
 }
 ";
@@ -105,9 +110,5 @@ pub async fn print_info(id: u64) {
         .await;
     // Get json
     let result: serde_json::Value = serde_json::from_str(&resp.unwrap()).unwrap();
-    // if result["data"]["media"] == json!(null) {
-    //     println!("API returned invalid Series ID. I am sorry.");
-    //     process::exit(1)
-    // }
     println!("{:#}", result);
 }
