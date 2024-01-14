@@ -15,7 +15,7 @@ fn fzf(options: Vec<String>) -> Option<String> {
     let _options_len = options.len();
 
     let skim_options = SkimOptionsBuilder::default()
-        .height(Some("50%"))
+        .height(Some("100%"))
         .multi(false) // Single selection
         .build()
         .unwrap();
@@ -38,21 +38,31 @@ fn fzf(options: Vec<String>) -> Option<String> {
 }
 
 #[tokio::main]
+
 async fn main() {
     let animes = vec![
-        "Re:Zero: Kara Hajimeru Isekai Seikatsu".to_string(),
-        "Mushoku Tensei: Jobless Reincarnation".to_string(),
-        "Tensei Shitara Slime Datta Ken".to_string(),
+        "Re:Zero".to_string(), //"Re:Zero: Kara Hajimeru Isekai Seikatsu".to_string(),
+        "Mushoku Tensei".to_string(), // "Mushoku Tensei: Jobless Reincarnation".to_string(),
+        "Tensura".to_string(), // "Tensei Shitara Slime Datta Ken".to_string(),
     ];
     let title = fzf(animes);
     let mut chosen_id = 0;
     if let Some(title) = title {
         match requests::make_graphql_request(&title).await {
             Ok(titles_and_ids) => {
-                // Print the HashMap
-                for (title, id) in titles_and_ids {
-                    println!("ID: {}, Title: {}", &id, title);
-                    chosen_id = id;
+                let titles_and_ids: Vec<_> = titles_and_ids.into_iter().collect(); // Convert to Vec to allow multiple borrows
+                for (_, _id) in &titles_and_ids {
+                    let selection = fzf(Vec::from_iter(
+                        titles_and_ids.iter().map(|(t, _)| t.clone()),
+                    ));
+                    if let Some(selected_title) = selection {
+                        chosen_id = titles_and_ids
+                            .iter()
+                            .find(|(t, _)| t == &selected_title)
+                            .unwrap()
+                            .1;
+                        break;
+                    }
                 }
             }
             Err(e) => eprintln!("Error making GraphQL request: {:?}", e),
@@ -60,6 +70,6 @@ async fn main() {
     } else {
         println!("No title selected");
     }
-    println!("ID is: {}", &chosen_id);
+    println!("ID is: {}", chosen_id);
     requests::print_info(chosen_id).await;
 }

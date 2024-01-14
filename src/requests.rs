@@ -1,6 +1,6 @@
 use reqwest::Client;
 use serde_json::json;
-use std::collections::HashMap;
+use std::{collections::HashMap, process};
 
 const QUERY_PAGES: &str = "
 query ($id: Int, $page: Int, $perPage: Int, $search: String) {
@@ -33,6 +33,7 @@ query ($id: Int) { # Define which variables will be used in the query (id)
     }
     status
     description
+    averageScore
   }
 }
 ";
@@ -47,7 +48,7 @@ pub async fn make_graphql_request(title: &str) -> Result<HashMap<String, u64>, r
             "variables": {
                 "search": title,
                 "page": 1,
-                "perPage": 3
+                "perPage": 10
             }
         }
     );
@@ -104,5 +105,9 @@ pub async fn print_info(id: u64) {
         .await;
     // Get json
     let result: serde_json::Value = serde_json::from_str(&resp.unwrap()).unwrap();
+    if result["data"]["media"] == json!(null) {
+        println!("API returned invalid Series ID. I am sorry.");
+        process::exit(1)
+    }
     println!("{:#}", result);
 }
