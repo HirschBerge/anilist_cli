@@ -12,7 +12,7 @@ query ($id: Int, $page: Int, $perPage: Int, $search: String) {
             hasNextPage
             perPage
         }
-        media (id: $id, search: $search) {
+        media (id: $id, search: $search, type: ANIME) {
             id
             title {
                 romaji
@@ -105,9 +105,9 @@ pub async fn print_info(id: u64) {
         .await;
     // Get json
     let result: serde_json::Value = serde_json::from_str(&resp.unwrap()).unwrap();
-    if result["data"]["media"] == json!(null) {
-        println!("API returned invalid Series ID. I am sorry.");
-        process::exit(1)
-    }
+    // if result["data"]["media"] == json!(null) {
+    //     println!("API returned invalid Series ID. I am sorry.");
+    //     process::exit(1)
+    // }
     println!("{:#}", result);
 }
