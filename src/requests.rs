@@ -32,6 +32,7 @@ query ($id: Int) { # Define which variables will be used in the query (id)
       native
     }
     status
+    genres
     description
     averageScore
     seasonYear
