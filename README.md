@@ -21,6 +21,9 @@
          <a = href="https://github.com/HirschBerge/anilist_cli/issues">
             <img src="https://img.shields.io/github/issues/HirschBerge/anilist_cli.svg?style=for-the-badge&labelColor=303446&color=D2F7A6">
          </a>
+         <a href="https://github.com/HirschBerge/anilist_cli/pulls">
+            <img src="https://img.shields.io/github/issues-pr/HirschBerge/anilist_cli.svg?style=for-the-badge&labelColor=303446&color=ec9ca4">
+         </a>
          <a href="https://github.com/HirschBerge/anilist_cli/blob/main/LICENSE">
             <img src="https://img.shields.io/static/v1.svg?style=for-the-badge&label=License&message=MIT&colorA=313244&colorB=F5A97F&logo=unlicense&logoColor=F5A97F&"/>
          </a>
@@ -28,8 +31,6 @@
       <br>
    </div>
 </h1>
-[![GitHub repo size](https://img.shields.io/github/repo-size/HirschBerge/anilist_cli.svg)](https://github.com/HirschBerge/anilist_cli) [![GitHub stars](https://img.shields.io/github/stars/HirschBerge/anilist_cli
-)](https://github.com/HirschBerge/anilist_cli/stargazers) [![GitHub issues](https://img.shields.io/github/issues/HirschBerge/anilist_cli.svg)](https://github.com/HirschBerge/anilist_cli/issues) [![GitHub pull requests](https://img.shields.io/github/issues-pr/HirschBerge/anilist_cli.svg)](https://github.com/HirschBerge/anilist_cli/pulls)
 
 # CLI Anime Info tool powered by Rust and AniList
 
