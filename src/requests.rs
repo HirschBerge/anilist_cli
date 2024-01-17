@@ -44,7 +44,19 @@ query ($id: Int) { # Define which variables will be used in the query (id)
 }
 ";
 
-pub async fn make_graphql_request(title: &str) -> Result<HashMap<String, u64>, reqwest::Error> {
+/// # Description
+/// Used to make make a search API query to Anilist
+///
+/// Returns a `Result<HashMap<String, u64>, reqwest::Error>` containing the search results from AniList
+///
+/// # Usage
+/// ```
+/// let results = anilist_api_search("Darling in the FranXX");
+///```
+/// # Errors
+///
+/// This function will return an error if TBD
+pub async fn anilist_api_search(title: &str) -> Result<HashMap<String, u64>, reqwest::Error> {
     let client = Client::new();
 
     // Define query and variables
@@ -94,7 +106,7 @@ pub async fn make_graphql_request(title: &str) -> Result<HashMap<String, u64>, r
     Ok(titles_and_ids)
 }
 
-pub async fn print_info(id: u64) {
+pub async fn anilist_metadata_lookup(id: u64) {
     let client = Client::new();
     // Define query and variables
     let json = json!({"query": QUERY_INFO, "variables": {"id": id}});

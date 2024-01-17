@@ -4,7 +4,14 @@ extern crate skim;
 use skim::prelude::*;
 use std::{fs, io::Cursor};
 
-fn generate_dirs(dir_path: &str) -> Vec<String> {
+/// # Description
+/// When given a `&str` type path to a directory, it will generate a `Vec<String>` containing all
+/// sub-directories one level deep (aka, all the shows within the parent directory)
+/// # Usage
+/// ```
+/// let shows = generate_library_dirs("/mnt/NAS/Anime");
+/// ```
+fn generate_library_dirs(dir_path: &str) -> Vec<String> {
     match fs::read_dir(dir_path) {
         Ok(entries) => {
             let directories: Vec<_> = entries
@@ -29,7 +36,7 @@ fn generate_dirs(dir_path: &str) -> Vec<String> {
     }
 }
 
-fn fzf(options: Vec<String>) -> Option<String> {
+fn fuzzy_finder(options: Vec<String>) -> Option<String> {
     let stringified_choice = options.join("\n");
     let _options_len = options.len();
 
@@ -57,17 +64,16 @@ fn fzf(options: Vec<String>) -> Option<String> {
 }
 
 #[tokio::main]
-
 async fn main() {
-    let animes = generate_dirs("/mnt/NAS/Anime");
-    let title = fzf(animes);
+    let animes = generate_library_dirs("/mnt/NAS/Anime");
+    let title = fuzzy_finder(animes);
     let mut chosen_id = 0;
     if let Some(title) = title {
-        match requests::make_graphql_request(&title).await {
+        match requests::anilist_api_search(&title).await {
             Ok(titles_and_ids) => {
                 let titles_and_ids: Vec<_> = titles_and_ids.into_iter().collect(); // Convert to Vec to allow multiple borrows
                 for (_, _id) in &titles_and_ids {
-                    let selection = fzf(Vec::from_iter(
+                    let selection = fuzzy_finder(Vec::from_iter(
                         titles_and_ids.iter().map(|(t, _)| t.clone()),
                     ));
                     if let Some(selected_title) = selection {
@@ -86,5 +92,5 @@ async fn main() {
         println!("No title selected");
     }
     // println!("ID is: {}", chosen_id);
-    requests::print_info(chosen_id).await;
+    requests::anilist_metadata_lookup(chosen_id).await;
 }
