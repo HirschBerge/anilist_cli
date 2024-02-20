@@ -36,6 +36,16 @@ fn generate_library_dirs(dir_path: &str) -> Vec<String> {
     }
 }
 
+/// fuzzy_finder
+///
+/// # Generates a fzf-like search given a Vec<String>
+///
+/// ## Usage
+/// ```
+/// let title = fuzzy_finder(animes);
+/// // or...
+/// let selection = fuzzy_finder(Vec::from_iter(...)
+///````
 fn fuzzy_finder(options: Vec<String>) -> Option<String> {
     let stringified_choice = options.join("\n");
     let _options_len = options.len();
