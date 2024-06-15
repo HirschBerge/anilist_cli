@@ -61,7 +61,7 @@ fn fuzzy_finder(options: Vec<String>) -> Option<String> {
 
     let selected_items = Skim::run_with(&skim_options, Some(items))
         .map(|out| out.selected_items)
-        .unwrap_or_else(|| Vec::new());
+        .unwrap_or_default();
 
     if !selected_items.is_empty() {
         // Skim returns the selected item(s)
