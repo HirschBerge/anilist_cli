@@ -90,7 +90,7 @@ async fn main() {
                         chosen_id = titles_and_ids
                             .iter()
                             .find(|(t, _)| t == &selected_title)
-                            .unwrap()
+                            .expect("Valid ID")
                             .1;
                         break;
                     }
