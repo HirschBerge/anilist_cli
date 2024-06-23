@@ -73,6 +73,10 @@ fn fuzzy_finder(options: Vec<String>) -> Option<String> {
     }
 }
 
+// TODO: Given a CSV list of anime, return the time the next episode airs.
+fn _read_csv() {
+}
+
 #[tokio::main]
 async fn main() {
     let animes = generate_library_dirs("/mnt/NAS/Anime");

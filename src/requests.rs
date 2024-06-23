@@ -1,7 +1,7 @@
 use reqwest::Client;
 use serde_json::json;
 use std::collections::HashMap;
-use chrono::{DateTime, Local, TimeZone};
+use chrono::{Local, TimeZone};
 
 const QUERY_PAGES: &str = "
 query ($id: Int, $page: Int, $perPage: Int, $search: String) {
