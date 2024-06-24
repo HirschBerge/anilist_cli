@@ -1,6 +1,7 @@
 mod requests;
 // Query to use in request
 extern crate skim;
+use requests::{anilist_api_search, anilist_metadata_lookup};
 use skim::prelude::*;
 use std::{fs, io::Cursor};
 
@@ -69,7 +70,7 @@ async fn main() {
     let title = fuzzy_finder(animes);
     let mut chosen_id = 0;
     if let Some(title) = title {
-        match requests::anilist_api_search(&title).await {
+        match anilist_api_search(&title).await {
             Ok(titles_and_ids) => {
                 let titles_and_ids: Vec<_> = titles_and_ids.into_iter().collect(); // Convert to Vec to allow multiple borrows
                 for (_, _id) in &titles_and_ids {
@@ -92,5 +93,5 @@ async fn main() {
         println!("No title selected");
     }
     // println!("ID is: {}", chosen_id);
-    requests::anilist_metadata_lookup(chosen_id).await;
+    anilist_metadata_lookup(chosen_id).await;
 }
