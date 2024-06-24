@@ -1,6 +1,7 @@
 use reqwest::Client;
 use serde_json::json;
 use std::collections::HashMap;
+use chrono::{Local, TimeZone};
 
 const QUERY_PAGES: &str = "
 query ($id: Int, $page: Int, $perPage: Int, $search: String) {
@@ -70,7 +71,6 @@ pub async fn anilist_api_search(title: &str) -> Result<HashMap<String, u64>, req
             }
         }
     );
-
     // Make HTTP post request
     let resp = client
         .post("https://graphql.anilist.co/")
@@ -106,6 +106,21 @@ pub async fn anilist_api_search(title: &str) -> Result<HashMap<String, u64>, req
     Ok(titles_and_ids)
 }
 
+fn format_time(mut result: serde_json::Value) -> serde_json::Value {
+    if let Some(airing_at_value) = result.pointer("/data/Media/nextAiringEpisode/airingAt") {
+        if airing_at_value.is_number() {
+            let timestamp = airing_at_value.as_i64().unwrap();
+            if let Some(naive_datetime) =  Local.timestamp_opt(timestamp, 0).single() {
+                let formatted_date = naive_datetime.format("%m-%d-%Y %H:%M").to_string();
+                if let Some(next_airing_episode) = result.pointer_mut("/data/Media/nextAiringEpisode") {
+                    next_airing_episode["airingAt"] = json!(formatted_date);
+                }
+            }
+        } 
+    }
+    result
+}
+
 pub async fn anilist_metadata_lookup(id: u64) {
     let client = Client::new();
     // Define query and variables
@@ -118,10 +133,12 @@ pub async fn anilist_metadata_lookup(id: u64) {
         .body(json.to_string())
         .send()
         .await
-        .unwrap()
+        .expect("Valid response from server.")
         .text()
         .await;
     // Get json
-    let result: serde_json::Value = serde_json::from_str(&resp.unwrap()).unwrap();
-    println!("{:#}", result);
+    let result: serde_json::Value = serde_json::from_str(&resp.expect("Valid data in response.")).expect("Responsee");
+    let final_result = format_time(result);
+
+    println!("{:#}", final_result);
 }

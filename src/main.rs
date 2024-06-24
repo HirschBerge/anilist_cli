@@ -37,6 +37,16 @@ fn generate_library_dirs(dir_path: &str) -> Vec<String> {
     }
 }
 
+/// fuzzy_finder
+///
+/// # Generates a fzf-like search given a Vec<String>
+///
+/// ## Usage
+/// ```
+/// let title = fuzzy_finder(animes);
+/// // or...
+/// let selection = fuzzy_finder(Vec::from_iter(...)
+///````
 fn fuzzy_finder(options: Vec<String>) -> Option<String> {
     let stringified_choice = options.join("\n");
     let _options_len = options.len();
@@ -52,7 +62,7 @@ fn fuzzy_finder(options: Vec<String>) -> Option<String> {
 
     let selected_items = Skim::run_with(&skim_options, Some(items))
         .map(|out| out.selected_items)
-        .unwrap_or_else(|| Vec::new());
+        .unwrap_or_default();
 
     if !selected_items.is_empty() {
         // Skim returns the selected item(s)
@@ -62,6 +72,10 @@ fn fuzzy_finder(options: Vec<String>) -> Option<String> {
     } else {
         None
     }
+}
+
+// TODO: Given a CSV list of anime, return the time the next episode airs.
+fn _read_csv() {
 }
 
 #[tokio::main]
@@ -81,7 +95,7 @@ async fn main() {
                         chosen_id = titles_and_ids
                             .iter()
                             .find(|(t, _)| t == &selected_title)
-                            .unwrap()
+                            .expect("Valid ID")
                             .1;
                         break;
                     }
