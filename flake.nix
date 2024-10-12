@@ -32,6 +32,7 @@
       devShells = forEachSupportedSystem ({ pkgs }: {
         default = pkgs.mkShell {
           packages = with pkgs; [
+            lldb_17
             rustToolchain
             openssl
             pkg-config
