@@ -23,6 +23,7 @@
         "owner": "NixOS",
         "repo": "nixpkgs",
         "rev": "e6cea36f83499eb4e9cd184c8a8e823296b50ad5",
+
         "type": "github"
       },
       "original": {
@@ -43,6 +44,7 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
+
         "lastModified": 1728613723,
         "narHash": "sha256-zVVj0PKguM8ZMdLE43YW7dzer3tl9e6i5Qs1fr878+c=",
         "owner": "oxalica",
