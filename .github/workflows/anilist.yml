@@ -33,7 +33,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Run Clippy
-      run: cargo clippy --allow-dirty -- -D warnings
+      run: cargo clippy -- -D warnings
   cargo_test:
 
     runs-on: ubuntu-latest
