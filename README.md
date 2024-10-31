@@ -39,9 +39,9 @@ This project plans to be a simple CLI front-end for [Anilist](https://anilist.gi
 
 ## Plans
 
-- [x] Choose Show and specify entry from AniList
-- [x] Some invalid IDs returned by API. Work around. See also [#2](/../../issues/2)
-- [x] Search subdirectories given a directory
+- [x] ~~Choose Show and specify entry from AniList~~
+- [x] ~~Some invalid IDs returned by API. Work around. See also [#2](/../../issues/2)~~
+- [x] ~~Search subdirectories given a directory~~
 - [ ] CLI search flag
 - [ ] UI? see also [#1](/../../issues/1)
 

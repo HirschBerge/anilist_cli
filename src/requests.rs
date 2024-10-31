@@ -1,6 +1,6 @@
 use reqwest::Client;
 use serde_json::json;
-use std::collections::HashMap;
+use std::{collections::HashMap, process::exit};
 use chrono::{Local, TimeZone};
 
 const QUERY_PAGES: &str = "
@@ -82,7 +82,21 @@ pub async fn anilist_api_search(title: &str) -> Result<HashMap<String, u64>, req
         .text()
         .await?;
 
-    let parsed_json: serde_json::Value = serde_json::from_str(&resp).unwrap();
+    let parsed_json: serde_json::Value;
+
+
+if let Ok(json) = serde_json::from_str::<serde_json::Value>(&resp) {
+    parsed_json = json;
+} else if resp.contains("Why have I been blocked") {
+        eprintln!("You have been API blocked.");
+        exit(1);
+    } else {
+        eprintln!("Failed to parse the API response.");
+        exit(1);
+}
+
+
+// parsed_json can now be used outside the if let block
 
     let mut titles_and_ids: HashMap<String, u64> = HashMap::new();
 
